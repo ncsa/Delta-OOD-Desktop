@@ -2,7 +2,9 @@
 
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-An interactive app designed for VT OnDemand that launches a **Desktop** batch job via singularity image.
+An interactive app designed for Delta OnDemand that launches a **Desktop** batch job via singularity image.
+
+Forked from https://github.com/AdvancedResearchComputing/OnDemandApps/tree/main/bc_vt_desktop
 
 ## Prerequisites
 
