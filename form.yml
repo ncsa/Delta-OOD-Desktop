@@ -2,58 +2,56 @@
 #
 ---
 cluster: 
-  - 'tinkercliffs'
-  - 'infer'
+  - 'delta'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
 attributes:
 
 # specify widgets for user modifiable job settings
-  bc_queue:
-    help: |
-      - To request a GPU enabled queue, preface it with v100_. Example: v100_normal_q, t4_normal_q
+  bc_account:
+    label: "Name of account"
+    widget: "text_field"
+    value: ""
+  
+  bc_reservation:
+    label: "Name of reservation (leave empty if none)"
+    widget: "text_field"
+    value: ""
 
-  bc_num_hours:
-    label: Number of hours (min-1, max-48)
-    required: true
-    value: 1
-    min: 1
-    max: 48
-    step: 1
+  bc_partition:
+    label: "Partition"
+    widget: "select"
+    value: "cpu-interactive"
+    help: "Interactive partitions are limited to 30 minutes."
+    options:
+      - ["cpu-interactive","cpu-interactive"]
+      - ["gpuA100x4-interactive","gpuA100x4-interactive"]
+      - ["gpuA40x4-interactive","gpuA40x4-interactive"]
+      - ["cpu","cpu"]
+      - ["gpuA100x4","gpuA100x4"]
+      - ["gpuA40x4","gpuA40x4"]
 
   bc_num_slots:
-    label: Number of nodes (currently confined to 1)
-    required: true
-    value: 1
-    min: 1
-    max: 1
-    step: 1
+    label: "Number of CPUs"
+    widget: "number_field"
+    min: "1"
 
-  bc_account:
-    widget: text_field
-    label: Account
-    value: ""
-    help: |
-       - The allocation you would like to use for SLURM.
+  bc_num_memory:
+    label: "Amount of RAM"
+    widget: "text_field"
+    help: "Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested."
 
-  num_cores:
-    widget: number_field
-    label: Number of cores per node (min-1, max-128)
-    value: 1
-    min: 1
-    max: 128
-    step: 1
+  bc_num_gpus:
+    label: "Number of GPUs"
+    widget: "number_field"
+#    max: "4"
+    min: "0"
 
-  gpu_per_node:
-    widget: number_field
-    label: Number of GPUs per node (min-0, max-2)
-    value: 0
-    min: 0
-    max: 1
-    step: 1
-    help: |
-       - If requesting GPU nodes, you must enter a GPU-enabled Partition above or the job will fail.
+  bc_duration:
+    label: "Duration of job"
+    widget: "text_field"
+    help: "Slurm format: DD-HH:MM:SS"
 
   bc_vnc_resolution:
     required: true
@@ -65,11 +63,11 @@ attributes:
 form:
   - cluster
   - bc_account
-  - reservation
-  - bc_queue
-  - bc_num_hours
+  - bc_partition
+  - bc_duration
+  - bc_reservation
   - bc_num_slots
-  - num_cores
-  - gpu_per_node
+  - bc_num_memory
+  - bc_num_gpus
   - bc_vnc_resolution
   - bc_email_on_started

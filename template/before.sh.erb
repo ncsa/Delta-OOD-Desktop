@@ -12,12 +12,13 @@ fi
 hostname
 pwd
 
-module load containers/singularity
+# Apptainer is in path by default
+#module load containers/singularity
 
 ## some singularity cleanup
 unset SINGULARITY_TMPDIR
 export SINGULARITYENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
-singularity run --cleanenv --nv \
-    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/projects,/work/$USER,/cm \
+apptainer run --cleanenv --nv \
+    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/projects,/scratch \
     /projects/arcsingularity/ubuntu-xfce-v0.2.0.sif -d "Desktop-$(hostname)" &

@@ -8,7 +8,7 @@
 #
 batch_connect:
   template: "basic"
-  set_host: "host=$(hostname -s)"
+#  set_host: "host=$(hostname -s)"
   conn_params:
     - ondemand_host
 #
@@ -16,13 +16,21 @@ batch_connect:
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
 script:
-  copy_environment: true      
+  copy_environment: true
+  accounting_id: "<%= bc_account %>"
+  queue_name: "<%= bc_partition %>"
+  email_on_started: <%= bc_email_on_started %>
   native: 
     - "--nodes=<%= bc_num_slots.blank? ? "1" : bc_num_slots.to_i %>"
     - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
-    - "--time=<%= bc_num_hours + ":0:0" %>"
-    - "--reservation=<%= reservation %>"
-    - "--account=<%= bc_account %>"
-    <%- if gpu_per_node.to_i > 0 -%>
-    - "--gres=gpu:<%= gpu_per_node.to_i %>"
+    <%- unless bc_num_memory.blank? %>
+    - "--mem=<%= bc_num_memory %>"
+    <%- end -%>
+    - "-t"
+    - "<%= bc_duration %>"
+    <%- unless bc_num_gpus.blank? or bc_num_gpus.to_i == 0 -%>
+    - "--gres=gpu:<%= bc_num_gpus %>"
+    <%- end -%>
+    <%- unless bc_reservation.blank? -%>
+    - "--reservation=<%= bc_reservation %>"
     <%- end -%>
