@@ -19,6 +19,7 @@ pwd
 unset SINGULARITY_TMPDIR
 export SINGULARITYENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
+echo "Tempdir at $TMPDIR"
 apptainer run --cleanenv --nv \
-    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/projects,/scratch \
+    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/scratch \
     /u/yanzhan2/scratch/Delta-OOD-Desktop/Singularityfiles/desktop-test.sif -d "Desktop-$(hostname)" &
