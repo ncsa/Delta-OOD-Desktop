@@ -21,4 +21,4 @@ export SINGULARITYENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 apptainer run --cleanenv --nv \
     --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/projects,/scratch \
-    /projects/arcsingularity/ubuntu-xfce-v0.2.0.sif -d "Desktop-$(hostname)" &
+    /u/yanzhan2/scratch/Delta-OOD-Desktop/Singularityfiles/desktop-test.sif -d "Desktop-$(hostname)" &
