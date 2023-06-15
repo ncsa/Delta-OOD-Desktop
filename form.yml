@@ -32,7 +32,7 @@ attributes:
       - ["gpuA100x4","gpuA100x4"]
       - ["gpuA40x4","gpuA40x4"]
 
-  bc_num_slots:
+  bc_num_cores:
     label: "Number of CPUs"
     widget: "number_field"
     min: "1"
@@ -66,7 +66,7 @@ form:
   - bc_partition
   - bc_duration
   - bc_reservation
-  - bc_num_slots
+  - bc_num_cores
   - bc_num_memory
   - bc_num_gpus
   - bc_vnc_resolution

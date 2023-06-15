@@ -21,8 +21,8 @@ script:
   queue_name: "<%= bc_partition %>"
   email_on_started: <%= bc_email_on_started %>
   native: 
-    - "--nodes=<%= bc_num_slots.blank? ? "1" : bc_num_slots.to_i %>"
-    - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
+    - "-N 1"
+    - "-n <%= bc_num_cores.blank? ? "1" : bc_num_cores %>"
     <%- unless bc_num_memory.blank? %>
     - "--mem=<%= bc_num_memory %>"
     <%- end -%>
