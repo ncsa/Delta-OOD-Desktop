@@ -12,7 +12,7 @@ pwd
 
 echo running on ${host}:${port}
 
-tmux new-session -d -s OOD.tmux.$SLURM_JOBID
+tmux new-session -d -s OOD-tmux-$SLURM_JOBID
 
 # hack to stay alive, change to get sing pid
 walltime=$(squeue -h -j $SLURM_JOBID -o "%l")
