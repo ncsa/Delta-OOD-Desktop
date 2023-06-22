@@ -20,6 +20,7 @@ unset APPTAINER_TMPDIR
 export APPTAINERENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 export TMPDIR=/scratch/bbka/yanzhan2/tmp
+mkdir $TMPDIR/varlibxkb
 apptainer run --cleanenv --nv \
-    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,/scratch \
+    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/scratch \
     /u/yanzhan2/scratch/Delta-OOD-Desktop/Singularityfiles/desktop-test.sif -d "Desktop-$(hostname)" &

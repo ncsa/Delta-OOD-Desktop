@@ -8,8 +8,8 @@ cd "${SINGULARITY_ROOTFS}"/opt
 git clone https://github.com/delta9000/websockify.git
 cd websockify || exit
 cd "${SINGULARITY_ROOTFS}"/opt
-wget https://github.com/novnc/noVNC/archive/refs/tags/v1.2.0.tar.gz || exit
-tar xvf v1.2.0.tar.gz
+wget https://github.com/novnc/noVNC/archive/refs/tags/v1.4.0.tar.gz || exit
+tar xvf v1.4.0.tar.gz
 
 %files
     services.conf
@@ -139,7 +139,7 @@ tar xvf v1.2.0.tar.gz
     export XDG_DATA_HOME="$TMPDIR"
     export XAUTHORITY="$TMPDIR"/.Xauthority
     export ICEAUTHORITY="$TMPDIR"/.ICEauthority
-    export PYTHONPATH=/usr/local/lib/python3.8/dist-packages/websockify-0.9.0-py3.8.egg
+    export PYTHONPATH=/usr/local/lib/python3.10/dist-packages/websockify-0.9.0-py3.10.egg
     
     export SUPERVISORD_PASSWORD
     export PASSWORD
