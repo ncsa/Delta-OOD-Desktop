@@ -19,6 +19,12 @@ attributes:
     widget: "text_field"
     value: ""
 
+  bc_image:
+    label: "Container image to use"
+    widget: "select"
+    options:
+      - ["desktop-test","/sw/oodimages/desktop-test.sif"]
+
   bc_partition:
     label: "Partition"
     widget: "select"
@@ -62,6 +68,7 @@ attributes:
 #
 form:
   - cluster
+  - bc_image
   - bc_account
   - bc_partition
   - bc_duration

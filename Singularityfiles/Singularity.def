@@ -27,7 +27,7 @@ tar xvf v1.4.0.tar.gz
     export TZ=America/New_York
     echo deb http://us.archive.ubuntu.com/ubuntu focal universe >> /etc/apt/sources.list
     #base
-    apt-get update && apt-get install --no-install-recommends -y ca-certificates python3 python3-setuptools tigervnc-standalone-server supervisor openssh-client xauth tigervnc-common wget vim tzdata firefox
+    apt-get update && apt-get install --no-install-recommends -y ca-certificates python3 python3-setuptools tigervnc-standalone-server supervisor openssh-client xauth tigervnc-common tigervnc-tools wget vim tzdata firefox
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
     dpkg-reconfigure --frontend noninteractive tzdata
     apt-get install -y --no-install-recommends \
@@ -145,7 +145,7 @@ tar xvf v1.4.0.tar.gz
     export PASSWORD
 
     # Set VNC password
-    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | vncpasswd "$TMPDIR"/.vncpasswd'  &> /dev/null
+    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | tigervncpasswd "$TMPDIR"/.vncpasswd'  &> /dev/null
 
     # Start Supervisord to manage background tasks
     supervisord -n &> /dev/null &
@@ -215,7 +215,8 @@ tar xvf v1.4.0.tar.gz
     done
 
     # Display connection detains on command line
-    CONNECTION_STRING="https://ood.arc.vt.edu/rnode/$(hostname)/$NOVNC_PORT/vnc.html?autoconnect=true&port=$NOVNC_PORT&host=ood.arc.vt.edu/rnode/$(hostname)/$NOVNC_PORT&password=$PASSWORD"
+    HOSTNAME=$(hostname -s).delta.internal.ncsa.edu
+    CONNECTION_STRING="https://ood-test.delta.ncsa.illinois.edu/rnode/$HOSTNAME/$NOVNC_PORT/vnc.html?autoconnect=true&port=$NOVNC_PORT&host=ood-test.delta.ncsa.illinois.edu/rnode/$HOSTNAME/$NOVNC_PORT&password=$PASSWORD"
     printf "X server listening on :%s\n" "$DISPLAY_NUM"
     printf "XAUTHORITY=%s ICEAUTHORITY=%s SESSION_MANAGER=%s DISPLAY=:%s\n\n" "$XAUTHORITY" "$ICEAUTHORITY" "$SESSION_MANAGER" "$DISPLAY_NUM"
     # shellcheck disable=SC2016
