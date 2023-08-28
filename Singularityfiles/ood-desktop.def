@@ -1,10 +1,11 @@
-Bootstrap: docker
-From: ubuntu:22.04
-Stage: build
+Bootstrap: yum
+OSVersion: 8.8
+MirrorURL: http://172.28.22.9/install/repos/rhel-%{OSVERSION}-for-x86_64-baseos-eus-rpms 
+Include: yum yum-utils
 
 %setup
-mkdir -p "${SINGULARITY_ROOTFS}"/opt
-cd "${SINGULARITY_ROOTFS}"/opt
+mkdir -p "${APPTAINER_ROOTFS}"/opt
+cd "${APPTAINER_ROOTFS}"/opt
 git clone https://github.com/delta9000/websockify.git
 cd websockify || exit
 cd "${SINGULARITY_ROOTFS}"/opt
@@ -19,45 +20,29 @@ tar xvf v1.4.0.tar.gz
     session-manager-export.desktop
     get_ice_session.py
 
-%environment
-    export LC_ALL=C
-
 %post
-    export DEBIAN_FRONTEND=noninteractive
-    export TZ=America/New_York
-    echo deb http://us.archive.ubuntu.com/ubuntu focal universe >> /etc/apt/sources.list
-    #base
-    apt-get update && apt-get install --no-install-recommends -y ca-certificates python3 python3-setuptools tigervnc-standalone-server supervisor openssh-client xauth tigervnc-common tigervnc-tools wget vim tzdata firefox
-    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-    dpkg-reconfigure --frontend noninteractive tzdata
-    apt-get install -y --no-install-recommends \
-      dbus-x11 \
-      psmisc \
-      xdg-utils \
-      x11-xserver-utils \
-      x11-utils \
-      xfce4 \
-      libgtk-3-bin \
-      mousepad \
-      xfce4-notifyd \
-      xfce4-taskmanager \
-      xfce4-terminal \
-      xfce4-clipman-plugin \
-      xfce4-datetime-plugin \
-      xfce4-indicator-plugin \
-      xfce4-timer-plugin \
-      xfce4-whiskermenu-plugin \
-      xubuntu-artwork \
-      xubuntu-icon-theme \
-      libxv1 \
-      libqt5gui5 \
-      qpdfview \
-      shellcheck 
+    yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
+    yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-appstream-eus-rpms
+    yum-config-manager --add-repo http://172.28.22.9/install/repos/codeready-builder-for-rhel-8.8-x86_64-eus-rpms
+    
+    yum-config-manager --save --setopt=172.28.22.9_install_repos_codeready-builder-for-rhel-8.8-x86_64-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-baseos-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-appstream-eus-rpms.gpgcheck=0
+    yum -y update
+    dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+    yum -y groupinstall "development tools"
+    yum -y install "vim-enhanced"
+    yum -y groupinstall minimal-environment
+    yum -y install ca-certificates python39 python39-setuptools tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox
+    alternatives --set python3 /usr/bin/python3.9
+    alternatives --set python /usr/bin/python3.9
+    yum -y groupinstall Xfce
     cd /opt/websockify || exit
     python3 setup.py install
     echo "export BUILD_DATE=\"$(date -R)\"" >> $SINGULARITY_ENVIRONMENT
-    mv /services.conf /etc/supervisor/conf.d/services.conf
-    mv /supervisor.conf /etc/supervisor/supervisord.conf
+    mv /services.conf /etc/supervisord.d/services.conf
+    mv /supervisor.conf /etc/supervisord.conf
     mv /xfcestart.sh /usr/local/bin/
     mv /Xvncstart.sh /usr/local/bin/
     mv /get_ice_session.py /usr/local/bin/
@@ -70,9 +55,12 @@ tar xvf v1.4.0.tar.gz
     mv /session-manager-export.desktop /etc/xdg/autostart/
     mkdir /TMPDIR
 
+%environment
+    export LC_ALL=C
 
 %runscript
 #!/bin/bash
+set -o xtrace
 
     #Helper Functuions
     function usage(){
@@ -121,7 +109,7 @@ tar xvf v1.4.0.tar.gz
     # Script setup
     trap cleanup INT
     echo $$ > "$TMPDIR"/runscript.pid
-    
+
     # Directory setup
     mkdir -p "$TMPDIR"/runtime
     chmod 700 "$TMPDIR"/runtime
@@ -145,7 +133,7 @@ tar xvf v1.4.0.tar.gz
     export PASSWORD
 
     # Set VNC password
-    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | tigervncpasswd "$TMPDIR"/.vncpasswd'  &> /dev/null
+    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | vncpasswd "$TMPDIR"/.vncpasswd'  &> /dev/null
 
     # Start Supervisord to manage background tasks
     supervisord -n &> /dev/null &
@@ -247,28 +235,3 @@ tar xvf v1.4.0.tar.gz
     printf "Waiting for supervisord to exit \n\nTo manually stop either:\n - Run 'kill -s SIGINT %s'\n - Log out of the windowmanager in the novnc session \n - Press CTRL+C in this terminal\n" "$(cat "$TMPDIR"/supervisord.pid)"
     wait "$(cat "$TMPDIR"/supervisord.pid)"
     cleanup
-
-%test 
-    if grep -q NAME=\"Ubuntu\" /etc/os-release; then
-        echo "Container base is Ubuntu as expected."
-    else
-        echo "Container base is not Ubuntu."
-    fi
-    
-    CHECK_SCRIPT="/singularity /usr/local/bin/xfcestart.sh /usr/local/bin/Xvncstart.sh"
-    if shellcheck $CHECK_SCRIPT; then
-        echo "$CHECK_SCRIPT passed shellcheck"
-    else
-      echo "Scripts did not pass shellcheck"
-    fi
-    exit 0
-
-%labels
-    Author bsandbro@vt.edu
-    Version v0.0.1
-
-%help
-    This container wraps an Xvnc server with an xfce window manager and exposes
-    a noVNC server on a random ephemeral port, connection details are printed to the terminal
-    or exported to connection.rc when a writable directory is bind mounted to /cwd in the container.
-    Source connection.rc and the terminal default DISPLAY will be set to the container XVNC instance
