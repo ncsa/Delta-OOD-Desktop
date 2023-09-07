@@ -23,5 +23,5 @@ export TMPDIR=$HOME/.ood_desktop_tmp
 rm -rf $TMPDIR
 mkdir -p $TMPDIR/varlibxkb
 apptainer run --cleanenv --nv \
-    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/scratch \
+    --bind `pwd`:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/scratch,/sw,/delta/home,/delta/scratch,/taiga,/projects,/ime \
     <%= context.bc_image %> -d "Desktop-$(hostname)" &
