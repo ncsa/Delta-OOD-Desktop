@@ -1,5 +1,24 @@
 #!/bin/bash -l
 
+wt_to_seconds() {
+  walltime=$1
+  if [[ ${walltime} == *"-"* ]]; then
+    IFS="-"
+    read days hms <<< ${walltime}
+    seconds=`date -ud "1970-01-01 ${hms}" +%s`
+    bc <<< "${days} * 86400 + ${seconds}"
+  else
+    case `echo ${walltime} | tr ":" " " | wc -w` in
+      3)
+        date -ud "1970-01-01 ${walltime}" +%s ;;
+      2)
+        date -ud "1970-01-01 00:${walltime}" +%s ;;
+      1)
+        echo ${walltime} ;;
+    esac
+  fi
+}
+
 # in case we want to do something fun with host/port/etc later
 while [ ! -f ./connection.rc ]; do sleep 1; done
 source connection.rc
@@ -16,6 +35,6 @@ tmux new-session -d -s OOD-tmux-$SLURM_JOBID
 
 # hack to stay alive, change to get sing pid
 walltime=$(squeue -h -j $SLURM_JOBID -o "%l")
-sleeptime=$(echo $walltime | sed 's/^/((/; s/:/)*60+/g' | bc)
+sleeptime=$(wt_to_seconds ${walltime})
 echo converting walltime to sleeptime: $walltime is $sleeptime
 sleep $sleeptime
