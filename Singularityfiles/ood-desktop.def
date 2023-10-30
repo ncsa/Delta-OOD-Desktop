@@ -199,7 +199,7 @@ set -o xtrace
         sleep 1
         continue
       fi
-    echo "Timeout waiting for Xvnc to start"
+    echo "Timeout waiting for Xfce to start"
     cleanup
     done
 
