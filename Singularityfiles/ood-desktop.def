@@ -20,6 +20,8 @@ tar xvf v1.4.0.tar.gz
     session-manager-export.desktop
     get_ice_session.py
     xfce4-screensaver.xml
+    xfce4-power-manager.xml
+    terminalrc
 
 %post
     yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
@@ -49,6 +51,9 @@ tar xvf v1.4.0.tar.gz
     mv /Xvncstart.sh /usr/local/bin/
     mv /get_ice_session.py /usr/local/bin/
     mv /xfce4-screensaver.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/
+    mv /xfce4-power-manager.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/
+    mkdir -p /etc/xdg/xfce4/terminal
+    mv /terminalrc /etc/xdg/xfce4/terminal/
 
     chmod +x /usr/local/bin/xfcestart.sh
     chmod +x /usr/local/bin/Xvncstart.sh
