@@ -19,6 +19,7 @@ tar xvf v1.4.0.tar.gz
     Xvncstart.sh
     session-manager-export.desktop
     get_ice_session.py
+    xfce4-screensaver.xml
 
 %post
     yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
@@ -47,6 +48,7 @@ tar xvf v1.4.0.tar.gz
     mv /xfcestart.sh /usr/local/bin/
     mv /Xvncstart.sh /usr/local/bin/
     mv /get_ice_session.py /usr/local/bin/
+    mv /xfce4-screensaver.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/
 
     chmod +x /usr/local/bin/xfcestart.sh
     chmod +x /usr/local/bin/Xvncstart.sh
@@ -55,6 +57,9 @@ tar xvf v1.4.0.tar.gz
     mkdir /cwd
     mv /session-manager-export.desktop /etc/xdg/autostart/
     mkdir /TMPDIR
+
+    # Disable Xfce PolKit
+    echo "Hidden=True" >> /etc/xdg/autostart/xfce-polkit.desktop
 
 %environment
     export LC_ALL=C
