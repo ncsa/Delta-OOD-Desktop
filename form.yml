@@ -12,6 +12,7 @@ attributes:
   bc_account:
     label: "Name of account"
     widget: "text_field"
+    help: "Chargeable account of the form abcd-delta-cpu or abcd-delta-gpu. Replace abcd with your allocation code."
     value: ""
   
   bc_reservation:
@@ -29,7 +30,7 @@ attributes:
     label: "Partition"
     widget: "select"
     value: "cpu-interactive"
-    help: "Interactive partitions are limited to 30 minutes."
+    help: "Interactive partitions are limited to one hour."
     options:
       - ["cpu-interactive","cpu-interactive"]
       - ["gpuA100x4-interactive","gpuA100x4-interactive"]
