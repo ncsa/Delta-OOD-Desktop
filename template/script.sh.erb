@@ -37,4 +37,15 @@ tmux new-session -d -s OOD-tmux-$SLURM_JOBID
 walltime=$(squeue -h -j $SLURM_JOBID -o "%l")
 sleeptime=$(wt_to_seconds ${walltime})
 echo converting walltime to sleeptime: $walltime is $sleeptime
+
+# Create the end session script if it doesn't exist already
+if [ ! -d $HOME/Desktop ]; then mkdir $HOME/Desktop; fi
+cat > $HOME/Desktop/'End Session' << EOF
+#!/bin/bash
+
+sleep_pid=\`ps ux | grep "sleep \${sleeptime}" | head -n 1 | awk '{print \$2}'\`
+
+kill -9 \${sleep_pid}
+EOF
+
 sleep $sleeptime
