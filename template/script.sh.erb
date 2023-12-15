@@ -43,7 +43,7 @@ if [ ! -d $HOME/Desktop ]; then mkdir $HOME/Desktop; fi
 cat > $HOME/Desktop/'End Session' << EOF
 #!/bin/bash
 
-sleep_pid=\`ps ux | grep "sleep \${sleeptime}" | head -n 1 | awk '{print \$2}'\`
+sleep_pid=\`ps ux | grep "sleep ${sleeptime}" | head -n 1 | awk '{print \$2}'\`
 
 kill -9 \${sleep_pid}
 EOF
