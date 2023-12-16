@@ -47,5 +47,6 @@ sleep_pid=\`ps ux | grep "sleep ${sleeptime}" | head -n 1 | awk '{print \$2}'\`
 
 kill -9 \${sleep_pid}
 EOF
+chmod 550 $HOME/Desktop/'End Session'
 
 sleep $sleeptime
