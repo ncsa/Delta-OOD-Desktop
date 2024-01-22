@@ -47,7 +47,7 @@ attributes:
   bc_num_memory:
     label: "Amount of RAM"
     widget: "text_field"
-    help: "Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested."
+    help: "A minimum of 8GB is recommended for optimal performance. Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested."
 
   bc_num_gpus:
     label: "Number of GPUs"
