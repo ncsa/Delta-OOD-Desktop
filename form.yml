@@ -24,7 +24,7 @@ attributes:
     label: "Container image to use"
     widget: "select"
     options:
-      - ["desktop-test","/sw/oodimages/desktop-test.sif"]
+      - ["desktop-base","/sw/oodimages/desktop-base.sif"]
 
   bc_partition:
     label: "Partition"
