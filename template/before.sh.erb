@@ -27,5 +27,5 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR/varlibxkb
 export OOD_CWD=`pwd`
 ( cd && apptainer run --cleanenv --nv \
-  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/ime,/old_scratch,/scratch,/sw,/u,/taiga,/projects,/work,/etc/profile.d,/etc/cray-pe.d,/opt/cray --env PS1='[\u@\h \W]$ ' \
+  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/ime,/scratch,/sw,/u,/taiga,/projects,/work,/etc/profile.d,/etc/cray-pe.d,/opt/cray --env PS1='[\u@\h \W]$ ' \
     <%= context.bc_image %> -d "Desktop-$(hostname)" & )
