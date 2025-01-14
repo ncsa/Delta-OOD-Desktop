@@ -24,7 +24,8 @@ attributes:
     label: "Container image to use"
     widget: "select"
     options:
-      - ["desktop-base","/sw/oodimages/desktop-base.sif"]
+      # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
+      - ["desktop-cuda124-py39","/sw/oodimages/desktop-cuda124-py39.sif"]
 
   bc_partition:
     label: "Partition"
