@@ -1,6 +1,6 @@
 Bootstrap: yum
 OSVersion: 8.8
-MirrorURL: http://172.28.22.9/install/repos/rhel-%{OSVERSION}-for-x86_64-baseos-eus-rpms 
+MirrorURL: http://172.28.22.9/install/repos/rhel-%{OSVERSION}-for-x86_64-baseos-eus-rpms
 Include: yum yum-utils
 
 %setup
@@ -27,18 +27,31 @@ tar xvf v1.5.0.tar.gz
     yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
     yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-appstream-eus-rpms
     yum-config-manager --add-repo http://172.28.22.9/install/repos/codeready-builder-for-rhel-8.8-x86_64-eus-rpms
-    
+    yum-config-manager --add-repo http://172.28.22.9/install/repos/cuda-rhel8-x86_64
+    yum-config-manager --add-repo http://172.28.22.9/install/repos/slurm
+
     yum-config-manager --save --setopt=172.28.22.9_install_repos_codeready-builder-for-rhel-8.8-x86_64-eus-rpms.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-baseos-eus-rpms.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-appstream-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.22.9_install_repos_cuda-rhel8-x86_64.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.22.9_install_repos_slurm.gpgcheck=0
     yum -y update
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
     yum -y groupinstall "development tools"
     yum -y install "vim-enhanced"
     yum -y groupinstall minimal-environment
-    yum -y install ca-certificates python39 python39-setuptools tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox
+    # explicitly install numpy as the latest version no longer supports python3.9, but websockify does not require the latest
+    yum -y install ca-certificates python39 python39-setuptools python39-numpy tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox
+
+    yum -y install cuda-toolkit-12-4-12.4.0
+    dnf -y module install nvidia-driver:550-dkms
     yum -y install Lmod
+
+    yum -y install slurm-23.11.6
+    groupadd -g 93 slurm
+    useradd -d /var/lib/slurm -u 93 -g slurm slurm
+
     alternatives --set python3 /usr/bin/python3.9
     alternatives --set python /usr/bin/python3.9
     yum -y groupinstall Xfce
@@ -82,9 +95,9 @@ set -o xtrace
     function cleanup() {
       sleep 1
       printf '\nCleaning up...\n'
-      if [ -f "$TMPDIR"/supervisord.pid ]; then
+      if [ -f "$MY_TMPDIR"/supervisord.pid ]; then
         echo  "Killing supervisord..."
-        kill -s SIGTERM "$(cat "$TMPDIR"/supervisord.pid)"
+        kill -s SIGTERM "$(cat "$MY_TMPDIR"/supervisord.pid)"
       fi
       if [ -n "${DISPLAY_NUM}" ] && [ -e /tmp/.X11-unix/X"$DISPLAY_NUM" ]; then
         echo  "Removing X socket..."
@@ -115,16 +128,16 @@ set -o xtrace
       ;;
       esac
     done
-    export TMPDIR=/TMPDIR
+    export MY_TMPDIR=/TMPDIR
 
     # Script setup
     trap cleanup INT
-    echo $$ > "$TMPDIR"/runscript.pid
+    echo $$ > "$MY_TMPDIR"/runscript.pid
 
     # Directory setup
-    mkdir -p "$TMPDIR"/runtime
-    chmod 700 "$TMPDIR"/runtime
-    touch "$TMPDIR"/.Xauthority
+    mkdir -p "$MY_TMPDIR"/runtime
+    chmod 700 "$MY_TMPDIR"/runtime
+    touch "$MY_TMPDIR"/.Xauthority
 
     # Local Variables
     PASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w8 | head -n 1)
@@ -132,19 +145,19 @@ set -o xtrace
     DISPLAYNAME=${DISPLAYNAME:-$(hostname)}
 
     # Exported variables
-    export XDG_CONFIG_HOME="$TMPDIR"
-    export XDG_CACHE_HOME="$TMPDIR"
-    export XDG_RUNTIME_DIR="$TMPDIR"/runtime
-    export XDG_DATA_HOME="$TMPDIR"
-    export XAUTHORITY="$TMPDIR"/.Xauthority
-    export ICEAUTHORITY="$TMPDIR"/.ICEauthority
+    export XDG_CONFIG_HOME="$MY_TMPDIR"
+    export XDG_CACHE_HOME="$MY_TMPDIR"
+    export XDG_RUNTIME_DIR="$MY_TMPDIR"/runtime
+    export XDG_DATA_HOME="$MY_TMPDIR"
+    export XAUTHORITY="$MY_TMPDIR"/.Xauthority
+    export ICEAUTHORITY="$MY_TMPDIR"/.ICEauthority
     export PYTHONPATH=/usr/local/lib/python3.10/dist-packages/websockify-0.9.0-py3.10.egg
-    
+
     export SUPERVISORD_PASSWORD
     export PASSWORD
 
     # Set VNC password
-    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | vncpasswd "$TMPDIR"/.vncpasswd'  &> /dev/null
+    bash -c 'printf "%s\n%s\n\n" $PASSWORD $PASSWORD | vncpasswd "$MY_TMPDIR"/.vncpasswd'  &> /dev/null
 
     # Start Supervisord to manage background tasks
     supervisord -n &> /dev/null &
@@ -152,7 +165,7 @@ set -o xtrace
     # shellcheck disable=SC2034
     for i in {1..20}
       do
-      if [ -e "$TMPDIR"/supervisor.sock ]; then
+      if [ -e "$MY_TMPDIR"/supervisor.sock ]; then
         break
       else
         sleep 1
@@ -168,9 +181,9 @@ set -o xtrace
     # shellcheck disable=SC2034
     for i in {1..20}
       do
-      if [ -f "$TMPDIR"/.Xdisplaynum ] && \
-         [ -e "$TMPDIR"/.vncsocket ] && \
-         DISPLAY_NUM=$(tr -d '\n' < "$TMPDIR"/.Xdisplaynum ) && \
+      if [ -f "$MY_TMPDIR"/.Xdisplaynum ] && \
+         [ -e "$MY_TMPDIR"/.vncsocket ] && \
+         DISPLAY_NUM=$(tr -d '\n' < "$MY_TMPDIR"/.Xdisplaynum ) && \
          isint "$DISPLAY_NUM" ; then
         xauth add :"$DISPLAY_NUM" . "$(xxd -l 16 -p /dev/urandom)"
         break
@@ -186,8 +199,8 @@ set -o xtrace
     # shellcheck disable=SC2034
     for i in {1..20}
       do
-      if [ -f "$TMPDIR"/.novncport ]; then
-        NOVNC_PORT=$(cat "$TMPDIR"/.novncport)
+      if [ -f "$MY_TMPDIR"/.novncport ]; then
+        NOVNC_PORT=$(cat "$MY_TMPDIR"/.novncport)
         break
       else
         sleep 1
@@ -201,9 +214,9 @@ set -o xtrace
     # shellcheck disable=SC2034
     for i in {1..20}
       do
-      if [ -d "$TMPDIR"/xfce4 ] && [ -f "$TMPDIR"/session.rc ]; then
+      if [ -d "$MY_TMPDIR"/xfce4 ] && [ -f "$MY_TMPDIR"/session.rc ]; then
         # shellcheck disable=SC1090
-        source "$TMPDIR"/session.rc
+        source "$MY_TMPDIR"/session.rc
         break
       else
         sleep 1
@@ -219,19 +232,19 @@ set -o xtrace
     printf "X server listening on :%s\n" "$DISPLAY_NUM"
     printf "XAUTHORITY=%s ICEAUTHORITY=%s SESSION_MANAGER=%s DISPLAY=:%s\n\n" "$XAUTHORITY" "$ICEAUTHORITY" "$SESSION_MANAGER" "$DISPLAY_NUM"
     # shellcheck disable=SC2016
-    printf "Logs and sockets stored in %s\n" '/$TMPDIR/'
+    printf "Logs and sockets stored in %s\n" '/$MY_TMPDIR/'
     printf "Connect to %s\n\n" "$CONNECTION_STRING"
 
     # Write connection details to bash sourcable connection.rc file
     if [ -w "/cwd" ]; then
     {
       printf "export NOVNC_PORT=\"%s\"\n" "$NOVNC_PORT"
-      printf "export CONNECTION_STRING=\"%s\"\n" "$CONNECTION_STRING" 
+      printf "export CONNECTION_STRING=\"%s\"\n" "$CONNECTION_STRING"
       printf "export DISPLAY=\":%s\"\n" "$DISPLAY_NUM"
       # shellcheck disable=SC2016
-      printf "export XAUTHORITY=\"%s\"\n" '$TMPDIR/.Xauthority'
+      printf "export XAUTHORITY=\"%s\"\n" '$MY_TMPDIR/.Xauthority'
       # shellcheck disable=SC2016
-      printf "export ICEAUTHORITY=\"%s\"\n" '$TMPDIR/.ICEauthority'
+      printf "export ICEAUTHORITY=\"%s\"\n" '$MY_TMPDIR/.ICEauthority'
       printf "export SESSION_MANAGER=\"%s\"\n" "$SESSION_MANAGER"
       printf "export password=\"%s\"\n" "$PASSWORD"
       printf "export hostname=\"%s\"\n" "$(hostname)"
@@ -243,6 +256,6 @@ set -o xtrace
     fi
 
     # Wait for exit and then cleanup extra files
-    printf "Waiting for supervisord to exit \n\nTo manually stop either:\n - Run 'kill -s SIGINT %s'\n - Log out of the windowmanager in the novnc session \n - Press CTRL+C in this terminal\n" "$(cat "$TMPDIR"/supervisord.pid)"
-    wait "$(cat "$TMPDIR"/supervisord.pid)"
+    printf "Waiting for supervisord to exit \n\nTo manually stop either:\n - Run 'kill -s SIGINT %s'\n - Log out of the windowmanager in the novnc session \n - Press CTRL+C in this terminal\n" "$(cat "$MY_TMPDIR"/supervisord.pid)"
+    wait "$(cat "$MY_TMPDIR"/supervisord.pid)"
     cleanup
