@@ -34,9 +34,11 @@ attributes:
     help: "Interactive partitions are limited to one hour."
     options:
       - ["cpu-interactive","cpu-interactive"]
+      - ["gpuH200x8-interactive","gpuH200x8-interactive"]
       - ["gpuA100x4-interactive","gpuA100x4-interactive"]
       - ["gpuA40x4-interactive","gpuA40x4-interactive"]
       - ["cpu","cpu"]
+      - ["gpuH200x8","gpuH200x8"]
       - ["gpuA100x4","gpuA100x4"]
       - ["gpuA40x4","gpuA40x4"]
 
