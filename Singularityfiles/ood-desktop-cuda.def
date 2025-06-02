@@ -47,8 +47,6 @@ tar xvf v1.5.0.tar.gz
     # SUP-12383 ANSYS deps
     yum -y install libnsl libXp motif xterm
 
-    yum -y install cuda-toolkit-12-4-12.4.0
-    dnf -y module install nvidia-driver:550-dkms
     yum -y install Lmod
 
     yum -y install slurm-23.11.6
@@ -155,6 +153,9 @@ set -o xtrace
     export XAUTHORITY="$MY_TMPDIR"/.Xauthority
     export ICEAUTHORITY="$MY_TMPDIR"/.ICEauthority
     export PYTHONPATH=/usr/local/lib/python3.10/dist-packages/websockify-0.9.0-py3.10.egg
+
+    # Make sure the mounted NVIDIA libraries are in the library path
+    export LD_LIBRARY_PATH=/.singularity.d/libs:$LD_LIBRARY_PATH
 
     export SUPERVISORD_PASSWORD
     export PASSWORD
