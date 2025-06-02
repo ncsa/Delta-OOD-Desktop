@@ -44,6 +44,9 @@ tar xvf v1.5.0.tar.gz
     # explicitly install numpy as the latest version no longer supports python3.9, but websockify does not require the latest
     yum -y install ca-certificates python39 python39-setuptools python39-numpy tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox
 
+    # SUP-12383 ANSYS deps
+    yum -y install libnsl libXp motif xterm
+
     yum -y install cuda-toolkit-12-4-12.4.0
     dnf -y module install nvidia-driver:550-dkms
     yum -y install Lmod
