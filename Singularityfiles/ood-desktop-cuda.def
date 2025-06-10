@@ -47,6 +47,9 @@ tar xvf v1.5.0.tar.gz
     # SUP-12383 ANSYS deps
     yum -y install libnsl libXp motif xterm
 
+    # SUP-14568 Additional shells
+    yum -y install tcsh zsh ksh
+
     yum -y install Lmod
 
     yum -y install slurm-23.11.6
