@@ -17,7 +17,7 @@ batch_connect:
 #
 script:
   copy_environment: true
-  accounting_id: "<%= bc_account.strip %>"
+  accounting_id: "<%= bc_account %>"
   queue_name: "<%= bc_partition %>"
   email_on_started: <%= bc_email_on_started %>
   native: 

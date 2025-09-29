@@ -1,5 +1,18 @@
 # Batch Connect app configuration file
 #
+
+<%-
+  require 'open3'
+
+  def get_available_accounts()
+    cmd = "sacctmgr -nP show assoc format=account where user=#{CurrentUser.name}"
+    stdout, stderr, status = Open3.capture3(cmd)
+    accounts = stdout.split("\n")
+    accounts.delete("noalloc")
+    accounts
+  end
+%>
+
 ---
 cluster: 
   - 'delta'
@@ -11,9 +24,13 @@ attributes:
 # specify widgets for user modifiable job settings
   bc_account:
     label: "Name of account"
-    widget: "text_field"
-    help: "Chargeable account of the form abcd-delta-cpu or abcd-delta-gpu. Replace abcd with your allocation code."
-    value: ""
+    widget: "select"
+    required: true
+    help: "Account selected must match job type (CPU or GPU)."
+    options:
+      <%- get_available_accounts().each do |account| %>
+      - ["<%= account %>", "<%= account %>"]
+      <%- end %>
   
   bc_reservation:
     label: "Name of reservation (leave empty if none)"
