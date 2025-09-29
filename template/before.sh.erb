@@ -24,9 +24,16 @@ export APPTAINERENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 # Check if we have a GPU
 if [ -n "$CUDA_VISIBLE_DEVICES" ]; then
-	APPTAINER_GPU_ENABLE="--nv"
+    APPTAINER_GPU_ENABLE="--nv"
 else
-	APPTAINER_GPU_ENABLE=""
+    APPTAINER_GPU_ENABLE=""
+fi
+
+# Check for RHEL 9
+if [ "<%= context.bc_image %>" = "/sw/oodimages/desktop-rhel9.sif" ]; then
+    DIFF_MOUNTS="/opt/nvidia,"
+else
+    DIFF_MOUNTS="/ime,"
 fi
 
 export TMPDIR=$HOME/.ood_desktop_tmp
@@ -34,5 +41,5 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR/varlibxkb
 export OOD_CWD=`pwd`
 ( cd && apptainer run --cleanenv $APPTAINER_GPU_ENABLE \
-  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/ime,/scratch,/sw,/u,/taiga,/projects,/work,/etc/profile.d,/etc/cray-pe.d,/opt/cray,/var/spool/slurmd/conf-cache:/etc/slurm,/opt/slurm,/var/run/munge --env PS1='[\u@\h \W]$ ' \
+  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,$DIFF_MOUNTS/scratch,/sw,/u,/taiga,/projects,/work,/etc/profile.d,/etc/cray-pe.d,/opt/cray,/var/spool/slurmd/conf-cache:/etc/slurm,/opt/slurm,/var/run/munge --env PS1='[\u@\h \W]$ ' \
     <%= context.bc_image %> -d "Desktop-$(hostname)" & )

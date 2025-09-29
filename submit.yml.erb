@@ -31,6 +31,10 @@ script:
     <%- unless bc_num_gpus.blank? or bc_num_gpus.to_i == 0 -%>
     - "--gres=gpu:<%= bc_num_gpus %>"
     <%- end -%>
-    <%- unless bc_reservation.blank? -%>
+    <%- if bc_reservation.blank? %>
+      <%- if bc_image == "/sw/oodimages/desktop-rhel9.sif" %>
+    - "--reservation=RH9"
+      <%- end -%>
+    <%- else -%>
     - "--reservation=<%= bc_reservation.strip %>"
     <%- end -%>

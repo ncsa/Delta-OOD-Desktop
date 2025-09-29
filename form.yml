@@ -19,13 +19,15 @@ attributes:
     label: "Name of reservation (leave empty if none)"
     widget: "text_field"
     value: ""
+    help: "RHEL 9 sessions will be submitted to the RH9 reservation by default. Entering another reservation here will override the default behavior."
 
   bc_image:
     label: "Container image to use"
     widget: "select"
     options:
       # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
-      - ["desktop-cuda124-py39","/sw/oodimages/desktop-cuda124-py39.sif"]
+      - ["RHEL 8 w/ CUDA 12.4","/sw/oodimages/desktop-cuda124-py39.sif"]
+      - ["RHEL 9 w/ CUDA 12.8","/sw/oodimages/desktop-rhel9.sif"]
 
   bc_partition:
     label: "Partition"
@@ -50,7 +52,8 @@ attributes:
   bc_num_memory:
     label: "Amount of RAM"
     widget: "text_field"
-    help: "A minimum of 8GB is recommended for optimal performance. Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested."
+    pattern: "[0-9]+[MG]{1}"
+    help: "Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested. A minimum of 2GB is required for each job and lower values will be substituted before submission."
 
   bc_num_gpus:
     label: "Number of GPUs"

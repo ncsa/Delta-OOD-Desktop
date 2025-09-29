@@ -42,11 +42,13 @@ echo converting walltime to sleeptime: $walltime is $sleeptime
 if [ ! -d $HOME/Desktop ]; then mkdir $HOME/Desktop; fi
 cat > $HOME/Desktop/'End Session' << EOF
 #!/bin/bash
+### Automatically generated helper script
+### DO NOT MODIFY OR DELETE
 
 sleep_pid=\`ps ux | grep "sleep ${sleeptime}" | head -n 1 | awk '{print \$2}'\`
 
 kill -9 \${sleep_pid}
 EOF
-chmod 550 $HOME/Desktop/'End Session'
+chmod 700 $HOME/Desktop/'End Session'
 
 sleep $sleeptime
