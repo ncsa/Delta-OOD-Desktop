@@ -22,9 +22,19 @@ script:
   email_on_started: <%= bc_email_on_started %>
   native: 
     - "-N 1"
-    - "-n <%= bc_num_cores.blank? ? "1" : bc_num_cores %>"
-    <%- unless bc_num_memory.blank? %>
-    - "--mem=<%= bc_num_memory.strip %>"
+    - "-n <%= bc_num_cores.to_i %>"
+    <%- if bc_num_memory.blank? %>
+      <%- if bc_num_cores.to_i <= 2 %>
+    - "--mem=2G"
+      <%- end -%>
+    # do not explictly request memory if enough CPUs are requested
+    <%- else %>
+      <%- if ( bc_num_memory.end_with?('G') and bc_num_memory[/[0-9]+/].to_i < 2 ) or
+          ( bc_num_memory.end_with?('M') and bc_num_memory[/[0-9]+/].to_i < 2048 ) %>
+    - "--mem=2G"
+      <%- else %>
+    - "--mem=<%= bc_num_memory %>"
+      <%- end -%>
     <%- end -%>
     - "-t"
     - "<%= bc_duration.strip %>"

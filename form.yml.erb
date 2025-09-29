@@ -64,6 +64,7 @@ attributes:
   bc_num_cores:
     label: "Number of CPUs"
     widget: "number_field"
+    required: true
     min: "1"
 
   bc_num_memory:
@@ -81,6 +82,8 @@ attributes:
   bc_duration:
     label: "Duration of job"
     widget: "text_field"
+    required: true
+    value: "1:00:00"
     help: "Slurm format: DD-HH:MM:SS"
 
   bc_vnc_resolution:
