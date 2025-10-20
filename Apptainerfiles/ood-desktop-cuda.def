@@ -8,7 +8,7 @@ mkdir -p "${APPTAINER_ROOTFS}"/opt
 cd "${APPTAINER_ROOTFS}"/opt
 git clone https://github.com/delta9000/websockify.git
 cd websockify || exit
-cd "${SINGULARITY_ROOTFS}"/opt
+cd "${APPTAINER_ROOTFS}"/opt
 wget https://github.com/novnc/noVNC/archive/refs/tags/v1.5.0.tar.gz || exit
 tar xvf v1.5.0.tar.gz
 
@@ -61,7 +61,7 @@ tar xvf v1.5.0.tar.gz
     yum -y groupinstall Xfce
     cd /opt/websockify || exit
     python3 setup.py install
-    echo "export BUILD_DATE=\"$(date -R)\"" >> $SINGULARITY_ENVIRONMENT
+    echo "export BUILD_DATE=\"$(date -R)\"" >> $APPTAINER_ENVIRONMENT
     mv /services.conf /etc/supervisord.d/services.conf
     mv /supervisor.conf /etc/supervisord.conf
     mv /xfcestart.sh /usr/local/bin/
@@ -92,7 +92,7 @@ set -o xtrace
 
     #Helper Functuions
     function usage(){
-      echo "usage: singularity run --bind $(pwd):/cwd --bind $TMPDIR:/TMPDIR /path/to/sif/file.sif [-d \"displayname\"]"
+      echo "usage: apptainer run --bind $(pwd):/cwd --bind $TMPDIR:/TMPDIR /path/to/sif/file.sif [-d \"displayname\"]"
       exit
     }
     function isint() { case $1 in ''|*[!0-9]*) return 1;;esac;}
@@ -158,7 +158,7 @@ set -o xtrace
     export PYTHONPATH=/usr/local/lib/python3.10/dist-packages/websockify-0.9.0-py3.10.egg
 
     # Make sure the mounted NVIDIA libraries are in the library path
-    export LD_LIBRARY_PATH=/.singularity.d/libs:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/.apptainer.d/libs:$LD_LIBRARY_PATH
 
     export SUPERVISORD_PASSWORD
     export PASSWORD
@@ -234,7 +234,7 @@ set -o xtrace
     done
 
     # Display connection detains on command line
-    HOSTNAME=$(hostname -s).delta.internal.ncsa.edu
+    HOSTNAME=$(hostname -s).internal.ncsa.edu
     CONNECTION_STRING="https://ood-test.delta.ncsa.illinois.edu/rnode/$HOSTNAME/$NOVNC_PORT/vnc.html?autoconnect=true&port=$NOVNC_PORT&host=ood-test.delta.ncsa.illinois.edu/rnode/$HOSTNAME/$NOVNC_PORT&password=$PASSWORD"
     printf "X server listening on :%s\n" "$DISPLAY_NUM"
     printf "XAUTHORITY=%s ICEAUTHORITY=%s SESSION_MANAGER=%s DISPLAY=:%s\n\n" "$XAUTHORITY" "$ICEAUTHORITY" "$SESSION_MANAGER" "$DISPLAY_NUM"
@@ -259,7 +259,7 @@ set -o xtrace
     } >> /cwd/connection.rc
       echo "Wrote connection.rc to the /cwd bind mount"
     else
-      echo "Add bind mount to /cwd from a writable directory to export connection.rc with bash sourceable details about this container, ex. 'singularity run --cleanenv --env PYTHONPATH=/usr/local/lib/python3.8/dist-packages/websockify-0.9.0-py3.8.egg --bind \`pwd\`:/cwd ubuntu-xfce.sif'";
+      echo "Add bind mount to /cwd from a writable directory to export connection.rc with bash sourceable details about this container, ex. 'apptainer run --cleanenv --env PYTHONPATH=/usr/local/lib/python3.8/dist-packages/websockify-0.9.0-py3.8.egg --bind \`pwd\`:/cwd ubuntu-xfce.sif'";
     fi
 
     # Wait for exit and then cleanup extra files

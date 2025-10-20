@@ -13,12 +13,12 @@ hostname
 pwd
 
 # Apptainer is in path by default
-#module load containers/singularity
+#module load containers/apptainer
 
 # Get OOD hostname
 export ondemand_host=$(cut -d, -f1 <<< $OOD_ALLOWED_HOSTS)
 
-## some singularity cleanup
+## some apptainer cleanup
 unset APPTAINER_TMPDIR
 export APPTAINERENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 

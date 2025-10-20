@@ -2,7 +2,7 @@
 
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-An interactive app designed for Delta OnDemand that launches a **Desktop** batch job via singularity image.
+An interactive app designed for mg OnDemand that launches a **Desktop** batch job via apptainer image.
 
 Forked from https://github.com/AdvancedResearchComputing/OnDemandApps/tree/main/bc_vt_desktop
 
@@ -16,26 +16,24 @@ OnDemand node):
   CLI used to load appropriate environments within the batch job before
   launching the Singularity image.
 
-- [Singularity] 3.7.1+
-- Corresponding module to launch the above Singularity image (see
+- [Apptainer]
+- Corresponding module to launch the above Apptainer image (see
   [example_module])
 
 [MATLAB]: https://matlab.mathworks.com/
-[Singularity]: http://singularity.lbl.gov/
+[Apptainer]: https://apptainer.org/
 [Lmod]: https://www.tacc.utexas.edu/research-development/tacc-projects/lmod
 [example_module]: https://github.com/nickjer/singularity-rstudio/blob/master/example_module/
 
 ## OOD User Guide
 
-
 #### Step 1 
 Gather your requirements, You will need to provide: 
-- Account
 - Reservation (optional)
-- Matlab version (optional)
 - No of hours  
 - No of CPUs you need
 - No of GPUs you need
+- Amount of RAM you need
 
 > Note: partition of GPU may change based on different clusters use sinfo on cluster or else refer documentation links below  
 - Cluster
@@ -50,16 +48,13 @@ Open your on demand portal and click the app:
 Fill in the required details:    
 ![image](https://user-images.githubusercontent.com/4628915/138635016-a2b5ccbd-19f0-40f6-bbbe-870675f3e295.png)
 
-
 #### Step 4 
 Click Launch and your Desktop  will be ready in few minutes: 
 ![image](https://user-images.githubusercontent.com/4628915/138635230-b24d89ae-a1ce-4886-9277-934c63cfedcf.png)
 
-
 #### Step 5 
 All your running jobs are available under "My Interactive Sessions":
 ![image](https://user-images.githubusercontent.com/4628915/138635318-656ad9bd-75d6-4cb4-a9d9-c2dcc861ab75.png)
-
 
 Want to install this app on your OOD System ? 
 

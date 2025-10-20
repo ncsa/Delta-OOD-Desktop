@@ -16,30 +16,30 @@ OnDemand node):
   6.0.1+ or any other `module purge` and `module load <modules>` based CLI
   used to load appropriate environments within the batch job before launching
   the Jupyter Notebook server.
-- [Singularity](https://sylabs.io/guides/3.0/user-guide/installation.html) Singularity is a container platform. It allows you to create and run containers that package up pieces of software in a way that is portable and reproducible. ... Your container is a single file, and you don't have to worry about how to install all the software you need on each different operating system and system.
+- [Apptainer](https://apptainer.org/docs/admin/main/installation.html) Apptainer is a container platform. It allows you to create and run containers that package up pieces of software in a way that is portable and reproducible. ... Your container is a single file, and you don't have to worry about how to install all the software you need on each different operating system and system.
 
 ## Downloading and building docker image
 
-Building singularity image requires elevated priviledges which may not be feasible on production environments thus we provide prebuilt image file as release artefacts.
+Building apptainer image requires elevated privileges which may not be feasible on production environments thus we provide prebuilt image file as release artifacts.
 
 ``` sh 
-singularity pull --arch amd64 library://ayushchatur/default/bc_vt_desktop:v2.0 
+apptainer pull --arch amd64 library://ayushchatur/default/bc_vt_desktop:v2.0 
 ```
 
 or Pull by unique ID (reproducible even if tags change) 
 
 ``` sh 
-singularity pull library://ayushchatur/default/bc_vt_desktop:sha256.b3d4f08674eb7c205c154c700b91cd667c93d73da02c7d59dedb198c1e2e7b48 
+apptainer pull library://ayushchatur/default/bc_vt_desktop:sha256.b3d4f08674eb7c205c154c700b91cd667c93d73da02c7d59dedb198c1e2e7b48 
 
 ```
 
-In case you have priviledged access you may build with reciepe as below 
+In case you have privileged access you may build with recipe as below 
 
 ``` sh 
 git clone https://github.com/AdvancedResearchComputing/OnDemandApps.git
 
-cd Singularityfiles
-sudo singularity build ubuntu-xfce.sif Singularity.def
+cd Apptainerfiles
+sudo apptainer build ubuntu-xfce.sif Singularity.def
 
 ```
 

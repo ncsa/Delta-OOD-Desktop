@@ -2,19 +2,14 @@
 #
 ---
 cluster: 
-  - 'delta'
+  - 'magnus'
 
 # Define attribute values that aren't meant to be modified by the user within
 # the Dashboard form
 attributes:
 
 # specify widgets for user modifiable job settings
-  bc_account:
-    label: "Name of account"
-    widget: "text_field"
-    help: "Chargeable account of the form abcd-delta-cpu or abcd-delta-gpu. Replace abcd with your allocation code."
-    value: ""
-  
+ 
   bc_reservation:
     label: "Name of reservation (leave empty if none)"
     widget: "text_field"
@@ -73,7 +68,6 @@ attributes:
 form:
   - cluster
   - bc_image
-  - bc_account
   - bc_partition
   - bc_duration
   - bc_reservation
