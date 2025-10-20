@@ -22,8 +22,18 @@ script:
   native: 
     - "-N 1"
     - "-n <%= bc_num_cores.blank? ? "1" : bc_num_cores %>"
-    <%- unless bc_num_memory.blank? %>
-    - "--mem=<%= bc_num_memory.strip %>"
+    <%- if bc_num_memory.blank? %>
+      <%- if bc_num_cores.to_i == 1 %>
+    - "--mem=6G"
+      <%- end -%>
+    # do not explictly request memory if enough CPUs are requested
+    <%- else %>
+      <%- if ( bc_num_memory.end_with?('G') and bc_num_memory[/[0-9]+/].to_i < 6 ) or
+          ( bc_num_memory.end_with?('M') and bc_num_memory[/[0-9]+/].to_i < 6144 ) %>
+    - "--mem=6G"
+      <%- else %>
+    - "--mem=<%= bc_num_memory %>"
+      <%- end -%>
     <%- end -%>
     - "-t"
     - "<%= bc_duration.strip %>"

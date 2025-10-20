@@ -1,6 +1,6 @@
 Bootstrap: yum
 OSVersion: 8.8
-MirrorURL: http://172.28.22.9/install/repos/rhel-%{OSVERSION}-for-x86_64-baseos-eus-rpms 
+MirrorURL: http://172.28.18.16/install/repos/rhel-%{OSVERSION}-for-x86_64-baseos-eus-rpms
 Include: yum yum-utils
 
 %setup
@@ -24,13 +24,13 @@ tar xvf v1.5.0.tar.gz
     terminalrc
 
 %post
-    yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
-    yum-config-manager --add-repo http://172.28.22.9/install/repos/rhel-8.8-for-x86_64-appstream-eus-rpms
-    yum-config-manager --add-repo http://172.28.22.9/install/repos/codeready-builder-for-rhel-8.8-x86_64-eus-rpms
+    yum-config-manager --add-repo http://172.28.18.16/install/repos/rhel-8.8-for-x86_64-baseos-eus-rpms
+    yum-config-manager --add-repo http://172.28.18.16/install/repos/rhel-8.8-for-x86_64-appstream-eus-rpms
+    yum-config-manager --add-repo http://172.28.18.16/install/repos/codeready-builder-for-rhel-8.8-x86_64-eus-rpms
     
-    yum-config-manager --save --setopt=172.28.22.9_install_repos_codeready-builder-for-rhel-8.8-x86_64-eus-rpms.gpgcheck=0
-    yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-baseos-eus-rpms.gpgcheck=0
-    yum-config-manager --save --setopt=172.28.22.9_install_repos_rhel-8.8-for-x86_64-appstream-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.18.16_install_repos_codeready-builder-for-rhel-8.8-x86_64-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.18.16_install_repos_rhel-8.8-for-x86_64-baseos-eus-rpms.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.18.16_install_repos_rhel-8.8-for-x86_64-appstream-eus-rpms.gpgcheck=0
     yum -y update
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 

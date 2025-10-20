@@ -1,7 +1,7 @@
 
 # Batch Connect - Desktop app 
 
-An example Batch Connect app that launches a Matlab application within a
+(Based on) an example Batch Connect app that launches a Matlab application within a
 batch job.
 
 ## Prerequisites

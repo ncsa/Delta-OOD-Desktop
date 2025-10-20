@@ -9,7 +9,7 @@ fi
 
 # Export the module function if it exists
 [[ $(type -t module) == "function" ]] && export -f module
-hostname
+hostname -f
 pwd
 
 # Apptainer is in path by default
@@ -19,7 +19,7 @@ pwd
 export ondemand_host=$(cut -d, -f1 <<< $OOD_ALLOWED_HOSTS)
 
 ## some apptainer cleanup
-unset APPTAINER_TMPDIR
+#unset APPTAINER_TMPDIR
 export APPTAINERENV_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
 # Check if we have a GPU
@@ -34,5 +34,5 @@ rm -rf $TMPDIR
 mkdir -p $TMPDIR/varlibxkb
 export OOD_CWD=`pwd`
 ( cd && apptainer run --cleanenv $APPTAINER_GPU_ENABLE \
-  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/ime,/scratch,/sw,/u,/taiga,/projects,/work,/etc/profile.d,/etc/cray-pe.d,/opt/cray,/var/spool/slurmd/conf-cache:/etc/slurm,/opt/slurm,/var/run/munge --env PS1='[\u@\h \W]$ ' \
-    <%= context.bc_image %> -d "Desktop-$(hostname)" & )
+  --bind $OOD_CWD:/cwd,$TMPDIR:/TMPDIR,$TMPDIR/varlibxkb:/var/lib/xkb,/scratch,/ui,/taiga,/projects,/usr/apps,/usr/local/modules,/usr/local/private,/usr/local/quarto,/usr/share/modulefiles,/etc/profile.d,/var/spool/slurmd/conf-cache:/etc/slurm,/etc/slurm/lua.d,/etc/slurm/plugstack.conf.d,/var/run/munge --env PS1='[\u@\h \W]$ ' \
+    <%= context.bc_image %> -d "Desktop-$(hostname -f)" & )

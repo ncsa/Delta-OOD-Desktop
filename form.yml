@@ -20,22 +20,18 @@ attributes:
     widget: "select"
     options:
       # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
-      - ["desktop-cuda124-py39","/sw/oodimages/desktop-cuda124-py39.sif"]
+      - ["desktop-rhel8.10-cuda130-py39","/usr/local/oodimages/desktop/desktop-rhel8.10-cuda130-py39-20251104.sif"]
 
   bc_partition:
     label: "Partition"
     widget: "select"
-    value: "cpu-interactive"
+    value: "magnus"
     help: "Interactive partitions are limited to one hour."
     options:
-      - ["cpu-interactive","cpu-interactive"]
-      - ["gpuH200x8-interactive","gpuH200x8-interactive"]
-      - ["gpuA100x4-interactive","gpuA100x4-interactive"]
-      - ["gpuA40x4-interactive","gpuA40x4-interactive"]
-      - ["cpu","cpu"]
-      - ["gpuH200x8","gpuH200x8"]
-      - ["gpuA100x4","gpuA100x4"]
-      - ["gpuA40x4","gpuA40x4"]
+      - ["magnus","magnus"]
+      - ["debug","debug"]
+      - ["himem","himem"]
+      - ["gpu","gpu"]
 
   bc_num_cores:
     label: "Number of CPUs"
@@ -45,7 +41,7 @@ attributes:
   bc_num_memory:
     label: "Amount of RAM"
     widget: "text_field"
-    help: "A minimum of 8GB is recommended for optimal performance. Use Slurm format, e.g. 4096M, 10G. If left blank, 1000 MB will be allocated per CPU core requested."
+    help: "Use Slurm format, e.g., 4096M, 10G. A minimum of 10GB RAM is recommened. If left blank, 4505 MB will be allocated per CPU core requested, but a minimum of 6GB is required and will be ensured."
 
   bc_num_gpus:
     label: "Number of GPUs"
