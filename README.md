@@ -14,7 +14,7 @@ OnDemand node):
 
 - [Lmod] 6.0.1+ or any other `module restore` and `module load <modules>` based
   CLI used to load appropriate environments within the batch job before
-  launching the Singularity image.
+  launching the Apptainer image.
 
 - [Apptainer]
 - Corresponding module to launch the above Apptainer image (see

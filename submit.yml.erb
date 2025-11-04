@@ -23,6 +23,9 @@ script:
     - "-N 1"
     - "-n <%= bc_num_cores.blank? ? "1" : bc_num_cores %>"
     <%- if bc_num_memory.blank? %>
+      <%- if bc_num_cores.blank? -%>
+    - "--mem=6G"
+      <%- end -%>
       <%- if bc_num_cores.to_i == 1 %>
     - "--mem=6G"
       <%- end -%>
@@ -35,8 +38,10 @@ script:
     - "--mem=<%= bc_num_memory %>"
       <%- end -%>
     <%- end -%>
+    <%- unless bc_duration.blank? -%>
     - "-t"
     - "<%= bc_duration.strip %>"
+    <%- end -%>
     <%- unless bc_num_gpus.blank? or bc_num_gpus.to_i == 0 -%>
     - "--gres=gpu:<%= bc_num_gpus %>"
     <%- end -%>
