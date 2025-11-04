@@ -43,7 +43,10 @@ tar xvf v1.5.0.tar.gz
     yum -y install "vim-enhanced"
     yum -y groupinstall minimal-environment
     # explicitly install numpy as the latest version no longer supports python3.9, but websockify does not require the latest
-    yum -y install ca-certificates python39 python39-setuptools python39-numpy tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox libglvnd-opengl
+    yum -y install ca-certificates python39 python39-setuptools python39-numpy tigervnc-server supervisor openssh-clients openssh xauth tigervnc tigervnc-server-module wget vim tzdata firefox
+
+    # general GUI support
+    yum -y install libglvnd-opengl
 
 #    # SUP-12383 ANSYS deps
 #    yum -y install libnsl libXp motif xterm
@@ -53,7 +56,7 @@ tar xvf v1.5.0.tar.gz
 
     yum -y install Lmod
 
-    yum -y install slurm slurm-spank-lua
+    yum -y install slurm slurm-spank-lua pmix
     groupadd -g 93 slurm
     useradd -d /var/lib/slurm -u 93 -g slurm slurm
 

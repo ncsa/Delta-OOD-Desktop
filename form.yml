@@ -20,7 +20,7 @@ attributes:
     widget: "select"
     options:
       # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
-      - ["desktop-rhel8.10-cuda130-py39","/usr/local/oodimages/desktop/desktop-rhel8.10-cuda130-py39-20251104.sif"]
+      - ["desktop-rhel8.10-cuda130-py39","/usr/local/oodimages/desktop/desktop-rhel8.10-cuda130-py39-20251105.sif"]
 
   bc_partition:
     label: "Partition"
