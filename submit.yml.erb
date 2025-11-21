@@ -42,7 +42,7 @@ script:
     - "--gres=gpu:<%= bc_num_gpus %>"
     <%- end -%>
     <%- if bc_reservation.blank? %>
-      <%- if bc_image == "/sw/oodimages/desktop-rhel9.sif" %>
+      <%- if rhel_release == "9" %>
     - "--reservation=RH9"
       <%- end -%>
     <%- else -%>

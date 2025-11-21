@@ -43,8 +43,8 @@ attributes:
     widget: "select"
     options:
       # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
-      - ["RHEL 8 w/ CUDA 12.4","/sw/oodimages/desktop-cuda124-py39.sif"]
-      - ["RHEL 9 w/ CUDA 12.8","/sw/oodimages/desktop-rhel9.sif"]
+      - ["RHEL 8 w/ CUDA 12.4","/sw/oodimages/desktop-cuda124-py39.sif", data-set-rhel-release: "8"]
+      - ["RHEL 9 w/ CUDA 12.8","/sw/oodimages/desktop-rhel9.sif", data-set-rhel-release: "9"]
 
   bc_partition:
     label: "Partition"
@@ -89,6 +89,9 @@ attributes:
   bc_vnc_resolution:
     required: true
 
+  rhel_release:
+    widget: "hidden_field"
+
 # All of the attributes that make up the Dashboard form (in respective order),
 # and made available to the submit configuration file and the template ERB
 # files
@@ -104,4 +107,5 @@ form:
   - bc_num_memory
   - bc_num_gpus
   - bc_vnc_resolution
+  - rhel_release
   - bc_email_on_started

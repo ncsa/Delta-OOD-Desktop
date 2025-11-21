@@ -30,7 +30,7 @@ else
 fi
 
 # Check for RHEL 9
-if [ "<%= context.bc_image %>" = "/sw/oodimages/desktop-rhel9.sif" ]; then
+if [ "<%= context.rhel_release %>" == "9" ]; then
     DIFF_MOUNTS="/opt/nvidia,"
 else
     DIFF_MOUNTS="/ime,"
