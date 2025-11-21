@@ -49,6 +49,12 @@ tar xvf v1.5.0.tar.gz
     # SUP-14568 Additional shells
     yum -y install tcsh zsh ksh
 
+    # SVCPLAN-8597
+    yum -y install glibc-all-langpacks
+
+    # SUP-20124 ParaView and VisIt deps
+    yum -y install pcre2-utf16 xcb-util-cursor xcb-util-wm xcb-util-keysyms libxcrypt-compat
+
     yum -y install Lmod
 
     yum -y install slurm-23.11.9
