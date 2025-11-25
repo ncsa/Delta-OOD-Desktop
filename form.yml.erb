@@ -2,12 +2,12 @@
 #
 
 <%-
-  require 'open3'
+  extend AccountCache
 
   def get_available_accounts()
-    cmd = "sacctmgr -nP show assoc format=account where user=#{CurrentUser.name}"
-    stdout, stderr, status = Open3.capture3(cmd)
-    accounts = stdout.split("\n")
+    # dynamic_accounts is a nested array looking like
+    # [ ["alice","alice",{}], ["bob","bob",{}] ]
+    accounts = dynamic_accounts.map(&:first)
     accounts.delete("noalloc")
     accounts
   end
