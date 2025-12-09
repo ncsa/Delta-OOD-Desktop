@@ -33,7 +33,7 @@ fi
 if [ "<%= context.rhel_release %>" == "9" ]; then
     DIFF_MOUNTS="/opt/nvidia,"
 else
-    DIFF_MOUNTS="/ime,"
+    DIFF_MOUNTS=""
 fi
 
 export TMPDIR=$HOME/.ood_desktop_tmp
