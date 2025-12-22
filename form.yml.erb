@@ -36,7 +36,7 @@ attributes:
     label: "Name of reservation (leave empty if none)"
     widget: "text_field"
     value: ""
-    help: "RHEL 9 sessions will be submitted to the RH9 reservation by default. Entering another reservation here will override the default behavior."
+    help: "RHEL 8 sessions will be submitted to the RH8 reservation by default. Entering another reservation here will override the default behavior."
 
   bc_image:
     label: "Container image to use"
@@ -45,6 +45,7 @@ attributes:
       # - ["desktop-base","/sw/oodimages/desktop-base.sif"]
       - ["RHEL 8 w/ CUDA 12.4","/sw/oodimages/desktop-cuda124-py39.sif", data-set-rhel-release: "8"]
       - ["RHEL 9 w/ CUDA 12.8","/sw/oodimages/desktop-rhel9.sif", data-set-rhel-release: "9"]
+    value: '/sw/oodimages/desktop-rhel9.sif'
 
   bc_partition:
     label: "Partition"

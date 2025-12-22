@@ -42,8 +42,8 @@ script:
     - "--gres=gpu:<%= bc_num_gpus %>"
     <%- end -%>
     <%- if bc_reservation.blank? %>
-      <%- if rhel_release == "9" %>
-    - "--reservation=RH9"
+      <%- if rhel_release == "8" %>
+    - "--reservation=RH8"
       <%- end -%>
     <%- else -%>
     - "--reservation=<%= bc_reservation.strip %>"
