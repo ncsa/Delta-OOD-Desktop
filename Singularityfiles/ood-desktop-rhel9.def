@@ -24,17 +24,20 @@ tar xvf v1.5.0.tar.gz
     terminalrc
 
 %post
+    # === NOTE: Remember to update repo links per Slingshot software upgrade ===
     yum-config-manager --add-repo http://172.28.22.19/install/repos/rhel-9.4-for-x86_64-baseos-eus-rpms
     yum-config-manager --add-repo http://172.28.22.19/install/repos/rhel-9.4-for-x86_64-appstream-eus-rpms
     yum-config-manager --add-repo http://172.28.22.19/install/repos/codeready-builder-for-rhel-9.4-x86_64-eus-rpms
     yum-config-manager --add-repo http://172.28.22.19/install/repos/cuda-rhel9-x86_64
     yum-config-manager --add-repo http://172.28.22.19/install/repos/slurm
+    yum-config-manager --add-repo http://172.28.22.19/install/repos/slingshot-host-software-12.0.2-68-rhel-9.4_x86_64/rpms/cassini/rhel-9.4/ncn
 
     yum-config-manager --save --setopt=172.28.22.19_install_repos_codeready-builder-for-rhel-9.4-x86_64-eus-rpms.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.19_install_repos_rhel-9.4-for-x86_64-baseos-eus-rpms.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.19_install_repos_rhel-9.4-for-x86_64-appstream-eus-rpms.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.19_install_repos_cuda-rhel9-x86_64.gpgcheck=0
     yum-config-manager --save --setopt=172.28.22.19_install_repos_slurm.gpgcheck=0
+    yum-config-manager --save --setopt=172.28.22.19_install_repos_slingshot-host-software-12.0.2-68-rhel-9.4_x86_64_rpms_cassini_rhel-9.4_ncn.gpgcheck=0
     yum -y update
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
@@ -55,9 +58,12 @@ tar xvf v1.5.0.tar.gz
     # SUP-20124 ParaView and VisIt deps
     yum -y install pcre2-utf16 xcb-util-cursor xcb-util-wm xcb-util-keysyms libxcrypt-compat
 
+    # SUP-21223 Cray Cassini libs
+    yum -y install cray-libcxi
+
     yum -y install Lmod
 
-    yum -y install slurm-23.11.9
+    yum -y install slurm-25.11.1
     groupadd -g 93 slurm
     useradd -d /var/lib/slurm -u 93 -g slurm slurm
 
